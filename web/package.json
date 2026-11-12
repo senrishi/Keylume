@@ -1,0 +1,1 @@
+{"name":"mk1300-rgb-studio","private":true,"type":"module","scripts":{"build":"node build.mjs","test":"node --test tests/*.test.mjs","dev":"python3 -m http.server 4173 --bind 127.0.0.1"}}
