@@ -1,7 +1,7 @@
 <p align="center"><img src="branding/logo.png" width="128" alt="Keylume logo"></p>
 <h1 align="center">Keylume</h1>
 <p align="center">Your keyboard. Your canvas.</p>
-<p align="center"><a href="https://github.com/senrishi/MK1300RGB/actions/workflows/build.yml"><img src="https://github.com/senrishi/MK1300RGB/actions/workflows/build.yml/badge.svg" alt="Build and test"></a> <a href="https://github.com/senrishi/MK1300RGB/releases/latest">Download the latest release</a> · <a href="https://mk1300-rgb-studio.earlyactor1.chatgpt.site">Open the web app</a></p>
+<p align="center"><a href="https://github.com/senrishi/Keylume/actions/workflows/build.yml"><img src="https://github.com/senrishi/Keylume/actions/workflows/build.yml/badge.svg" alt="Build and test"></a> <a href="https://github.com/senrishi/Keylume/releases/latest">Download the latest release</a> · <a href="https://mk1300-rgb-studio.earlyactor1.chatgpt.site">Open the web app</a></p>
 
 Keylume is a per-key RGB editor for the **Ant Esports MK1300 V2 mechanical gaming keyboard**, a 61-key / 60% keyboard. The supported hardware is USB **VID `36AE`, PID `FE12`**, using its vendor configuration interface (`FF00:0002`). Other MK1300 revisions and keyboards with different IDs are not supported by these desktop drivers.
 
@@ -9,7 +9,7 @@ Paint individual keys, apply firmware animations, adjust brightness, explore 140
 
 ## Downloads
 
-Get the desktop apps from [GitHub Releases](https://github.com/senrishi/MK1300RGB/releases/latest):
+Get the desktop apps from [GitHub Releases](https://github.com/senrishi/Keylume/releases/latest):
 
 | Download | Platform | Connection |
 | --- | --- | --- |
