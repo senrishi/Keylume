@@ -572,13 +572,39 @@ final class StudioAppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { false }
 }
 
+enum MenuBarIcon {
+    static let image: NSImage = {
+        let image = NSImage(size: NSSize(width: 20, height: 18), flipped: false) { _ in
+            let bars: [(CGFloat, CGFloat, NSColor)] = [
+                (2, 10, NSColor(srgbRed: 0, green: 0.68, blue: 0.88, alpha: 1)),
+                (8, 16, NSColor(srgbRed: 0.95, green: 0.18, blue: 0.48, alpha: 1)),
+                (14, 12, NSColor(srgbRed: 0.48, green: 0.76, blue: 0.16, alpha: 1))
+            ]
+            for (x, height, color) in bars {
+                color.setFill()
+                NSBezierPath(roundedRect: NSRect(x: x, y: (18 - height) / 2, width: 4, height: height),
+                             xRadius: 2, yRadius: 2).fill()
+            }
+            return true
+        }
+        image.isTemplate = false
+        image.accessibilityDescription = "MK1300 RGB Studio"
+        return image
+    }()
+}
+
 struct KeyboardEditorApp: App {
     @NSApplicationDelegateAdaptor(StudioAppDelegate.self) private var appDelegate
     @StateObject private var model = EditorState()
     var body: some Scene {
         Window("MK1300 RGB Studio", id: "editor") { Editor(model: model) }
             .windowResizability(.contentSize)
-        MenuBarExtra("MK1300 RGB", systemImage: "keyboard") { MenuBarControls(model: model) }
+        MenuBarExtra {
+            MenuBarControls(model: model)
+        } label: {
+            Image(nsImage: MenuBarIcon.image).renderingMode(.original)
+                .accessibilityLabel("MK1300 RGB Studio")
+        }
             .menuBarExtraStyle(.window)
     }
 }
