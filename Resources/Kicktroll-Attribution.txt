@@ -1,0 +1,7 @@
+Static RGB presets by kickTROLL
+https://github.com/kickTROLL/mk1300v2_RGB
+Source revision: e2d5eeb
+Licensed under Apache License 2.0. See Kicktroll-LICENSE.txt.
+
+This app contains static RGB values generated from the upstream effects.
+Key identifiers were translated to the MK1300 V2 FE12 editor layout.
