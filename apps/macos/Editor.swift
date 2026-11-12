@@ -292,7 +292,7 @@ struct Editor: View {
         HStack(alignment: .center) {
             VStack(alignment: .leading, spacing: 7) {
                 SectionEyebrow(title: "YOUR KEYBOARD. YOUR CANVAS.")
-                Text("RGB Studio").font(.system(size: 30, weight: .medium, design: .rounded))
+                Text("Keylume").font(.system(size: 30, weight: .medium, design: .rounded))
                 Text("Ant Esports MK1300 V2  ·  61 keys").font(.system(size: 11)).foregroundStyle(.secondary)
             }
             Spacer()
@@ -306,7 +306,7 @@ struct Editor: View {
         VStack(alignment: .leading, spacing: 18) {
             HStack(spacing: 9) {
                 Image(systemName: "square.grid.3x3.fill").foregroundStyle(studioAccent)
-                Text("MK1300").font(.system(size: 16, weight: .semibold, design: .rounded))
+                Text("KEYLUME").font(.system(size: 16, weight: .semibold, design: .rounded))
                 Text("STUDIO").font(.system(size: 8, weight: .bold)).tracking(1.5).foregroundStyle(.secondary)
             }.padding(.top, 8)
             TextField("Find a preset…", text: $model.query).textFieldStyle(.roundedBorder).font(.system(size: 12))
@@ -481,11 +481,11 @@ struct MenuBarControls: View {
             HStack {
                 Image(systemName: "keyboard").font(.system(size: 23)).foregroundStyle(studioAccent)
                 VStack(alignment: .leading, spacing: 3) {
-                    Text("MK1300 RGB").font(.system(size: 15, weight: .semibold))
+                    Text("Keylume").font(.system(size: 15, weight: .semibold))
                     Text(model.effect == -1 ? model.layoutName : model.effectName).font(.system(size: 11)).foregroundStyle(.secondary).lineLimit(1)
                 }
                 Spacer()
-                Button { openWindow(id: "editor"); NSApp.activate(ignoringOtherApps: true) } label: { Image(systemName: "arrow.up.right.square") }.help("Open RGB Studio")
+                Button { openWindow(id: "editor"); NSApp.activate(ignoringOtherApps: true) } label: { Image(systemName: "arrow.up.right.square") }.help("Open Keylume")
             }
             Divider()
             BrightnessControl(model: model)
@@ -493,7 +493,7 @@ struct MenuBarControls: View {
                 ForEach(model.presets.keys.sorted(), id: \.self) { name in
                     Button(name) { model.load(name, colors: model.presets[name] ?? [:], saved: true); model.apply() }
                 }
-                if model.presets.isEmpty { Text("Save layouts in RGB Studio first") }
+                if model.presets.isEmpty { Text("Save layouts in Keylume first") }
             } label: { Label("Apply a saved preset", systemImage: "square.stack") }
                 .disabled(model.isApplying || model.presets.isEmpty)
             HStack {
@@ -507,7 +507,7 @@ struct MenuBarControls: View {
             }
             Divider()
             HStack {
-                Button("Open RGB Studio") { openWindow(id: "editor"); NSApp.activate(ignoringOtherApps: true) }
+                Button("Open Keylume") { openWindow(id: "editor"); NSApp.activate(ignoringOtherApps: true) }
                 Spacer()
                 Button("Quit") { NSApp.terminate(nil) }.disabled(model.isApplying)
             }.font(.system(size: 11)).buttonStyle(.plain)
@@ -588,7 +588,7 @@ enum MenuBarIcon {
             return true
         }
         image.isTemplate = false
-        image.accessibilityDescription = "MK1300 RGB Studio"
+        image.accessibilityDescription = "Keylume"
         return image
     }()
 }
@@ -597,13 +597,13 @@ struct KeyboardEditorApp: App {
     @NSApplicationDelegateAdaptor(StudioAppDelegate.self) private var appDelegate
     @StateObject private var model = EditorState()
     var body: some Scene {
-        Window("MK1300 RGB Studio", id: "editor") { Editor(model: model) }
+        Window("Keylume", id: "editor") { Editor(model: model) }
             .windowResizability(.contentSize)
         MenuBarExtra {
             MenuBarControls(model: model)
         } label: {
             Image(nsImage: MenuBarIcon.image).renderingMode(.original)
-                .accessibilityLabel("MK1300 RGB Studio")
+                .accessibilityLabel("Keylume")
         }
             .menuBarExtraStyle(.window)
     }

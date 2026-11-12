@@ -1,0 +1,77 @@
+name: Build and test
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  workflow_call:
+permissions:
+  contents: read
+jobs:
+  web:
+    name: Web and protocol tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - run: npm test && npm run build
+        working-directory: apps/web
+      - run: node --test apps/windows/tests/*.test.cjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Keylume-Web
+          path: apps/web/dist/
+          if-no-files-found: error
+  macos:
+    name: macOS universal app
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Build and validate Apple Silicon + Intel app
+        run: zsh scripts/build-macos.sh
+        env:
+          KEYLUME_ARCHS: arm64 x86_64
+      - name: Package app bundle
+        run: |
+          mkdir -p release
+          ditto -c -k --sequesterRsrc --keepParent dist/Keylume.app "release/Keylume-$(cat VERSION)-macOS-universal.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Keylume-macOS
+          path: release/*.zip
+          if-no-files-found: error
+  windows:
+    name: Windows x64 portable executable
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: apps/windows
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: apps/windows/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: npm run dist
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      - name: Smoke test the packaged app and native HID binding
+        shell: pwsh
+        run: |
+          $report = Join-Path $env:RUNNER_TEMP 'keylume-self-test.json'
+          $process = Start-Process -FilePath '.\dist\win-unpacked\Keylume.exe' -ArgumentList '--self-test','--self-test-report',$report -PassThru -Wait
+          if ($process.ExitCode -ne 0) { throw "App self-test exited $($process.ExitCode)" }
+          if (!(Test-Path $report)) { throw 'App self-test report missing' }
+          $result = Get-Content $report | ConvertFrom-Json
+          if (!$result.ok -or !$result.nativeHID -or $result.presetCount -ne 140) { throw 'Packaged app self-test failed' }
+          Get-Content $report
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Keylume-Windows
+          path: apps/windows/dist/Keylume-*-Windows-x64.exe
+          if-no-files-found: error

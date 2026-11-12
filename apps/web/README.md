@@ -1,4 +1,4 @@
-# MK1300 RGB Studio · Web
+# Keylume · Web
 
 A standalone static WebHID editor for the Ant Esports MK1300 V2 (36AE:FE12). Paint any of the 61 keys, control brightness, apply 14 firmware effects, browse 140 Kicktroll presets and the RS monogram, save personal presets, and export/import JSON.
 
@@ -16,9 +16,9 @@ Open http://localhost:4173 in desktop Chrome or Edge. Node is only needed to run
 
 ## Host on your homelab
 
-Serve the **contents of `web/dist`** from any static host (Caddy, Nginx, Apache, or a NAS web server). The app uses relative asset URLs, so it can also live under a subdirectory. Serve it over **HTTPS** for remote/LAN access: a plain HTTP LAN IP does not qualify as a secure context for WebHID. Localhost is the development exception.
+Serve the **contents of `apps/web/dist`** from any static host (Caddy, Nginx, Apache, or a NAS web server). The app uses relative asset URLs, so it can also live under a subdirectory. Serve it over **HTTPS** for remote/LAN access: a plain HTTP LAN IP does not qualify as a secure context for WebHID. Localhost is the development exception.
 
-Optional Docker image, built from `web/`:
+Optional Docker image, built from `apps/web/`:
 
 ```sh
 docker build -t mk1300-studio .
@@ -57,4 +57,4 @@ No power measurement is simulated or exposed. Hardware animation previews are sy
 
 ## Credits
 
-The Kicktroll preset catalog is derived from https://github.com/kicktroll/mk1300v2_RGB. See `attribution.txt` and `LICENSE-presets.txt` for attribution and Apache-2.0 terms. The RS monogram comes from this repository's `Presets/RS.json`.
+The Kicktroll preset catalog is derived from https://github.com/kicktroll/mk1300v2_RGB. See `attribution.txt` and `LICENSE-presets.txt` for attribution and Apache-2.0 terms. The RS monogram comes from this repository's `shared/presets/RS.json`.

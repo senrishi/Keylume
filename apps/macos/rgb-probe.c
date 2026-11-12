@@ -46,7 +46,7 @@ static int exchange(IOHIDDeviceRef device, const uint8_t packet[64]) {
 }
 
 static const struct { const char *name; uint8_t index; } key_map[] = {
-#include "key-map.h"
+#include "../../shared/key-map.h"
 };
 
 static int enable_custom_mode(IOHIDDeviceRef device) {

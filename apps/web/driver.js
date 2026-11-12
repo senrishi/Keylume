@@ -1,6 +1,7 @@
+import {desktopHID} from './desktop-hid.js';
 import {keyMap,keys,scaled} from './layout.js';
 export class KeyboardDriver {
-  constructor(hid = globalThis.navigator?.hid) { this.hid=hid; this.device=null; this.pending=null; this.busy=false; this.onDisconnect=()=>{}; this.report=this.report.bind(this); hid?.addEventListener('disconnect',e=>{if(e.device===this.device){this.detach();this.onDisconnect();}}); }
+  constructor(hid = desktopHID() ?? globalThis.navigator?.hid) { this.hid=hid; this.device=null; this.pending=null; this.busy=false; this.onDisconnect=()=>{}; this.report=this.report.bind(this); hid?.addEventListener('disconnect',e=>{if(e.device===this.device){this.detach();this.onDisconnect();}}); }
   report(e) {
     const p=this.pending;
     const data=new Uint8Array(e.data.buffer,e.data.byteOffset,e.data.byteLength);

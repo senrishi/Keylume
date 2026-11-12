@@ -1,0 +1,27 @@
+{
+  "name": "keylume",
+  "version": "2.0.0",
+  "description": "Per-key RGB studio for the Ant Esports MK1300 V2 keyboard",
+  "author": "senrishi",
+  "private": true,
+  "main": "main.cjs",
+  "scripts": {
+    "prepare-ui": "node prepare-ui.mjs",
+    "start": "npm run prepare-ui && electron .",
+    "test": "node --test tests/*.test.cjs",
+    "dist": "npm run prepare-ui && electron-builder --win portable --x64 --publish never"
+  },
+  "dependencies": { "node-hid": "3.4.0" },
+  "devDependencies": { "electron": "45.3.1", "electron-builder": "26.18.0" },
+  "build": {
+    "appId": "local.keylume.rgb",
+    "productName": "Keylume",
+    "directories": { "output": "dist" },
+    "files": ["main.cjs", "preload.cjs", "hid-bridge.cjs", "ui/**/*", "assets/**/*", "package.json"],
+    "asarUnpack": ["**/*.node"],
+    "win": { "icon": "assets/Keylume.ico", "target": [{"target":"portable","arch":["x64"]}], "signAndEditExecutable": true },
+    "artifactName": "Keylume-${version}-Windows-x64.${ext}",
+    "portable": {"requestExecutionLevel":"user"},
+    "publish": null
+  }
+}

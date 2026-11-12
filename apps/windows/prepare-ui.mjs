@@ -1,0 +1,18 @@
+import {cp,mkdir,readFile,writeFile,rm} from 'node:fs/promises';
+import {fileURLToPath} from 'node:url';
+import {resolve,dirname} from 'node:path';
+import {execFileSync} from 'node:child_process';
+const directory=dirname(fileURLToPath(import.meta.url));
+const web=resolve(directory,'../web');
+execFileSync(process.execPath,['build.mjs'],{cwd:web,stdio:'inherit'});
+await rm(resolve(directory,'ui'),{recursive:true,force:true});
+await cp(resolve(web,'dist'),resolve(directory,'ui'),{recursive:true});
+await mkdir(resolve(directory,'assets'),{recursive:true});
+for(const name of ['Keylume.ico','logo.png','tray.png'])await cp(resolve(directory,'../../branding',name),resolve(directory,'assets',name));
+let html=await readFile(resolve(directory,'ui/index.html'),'utf8');
+html=html.replace('<head>','<head><meta http-equiv="Content-Security-Policy" content="default-src \'self\'; script-src \'self\'; style-src \'self\' \'unsafe-inline\'; img-src \'self\' blob: data:; connect-src \'self\'; font-src \'self\'; object-src \'none\'; base-uri \'none\'; frame-src \'none\'">');
+await writeFile(resolve(directory,'ui/index.html'),html);
+let css=await readFile(resolve(directory,'ui/style.css'),'utf8');
+css=css.replace(/^@import[^;]*;\s*/,'');
+await writeFile(resolve(directory,'ui/style.css'),css);
+console.log('Packaged offline editor and Keylume branding.');

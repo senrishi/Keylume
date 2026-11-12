@@ -3,7 +3,7 @@ import { readFileSync, writeFileSync, copyFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-const upstream = resolve(process.argv[2] ?? 'mk1300v2_RGB');
+const upstream = resolve(process.argv[2] ?? new URL('../vendor/mk1300v2_RGB', import.meta.url).pathname);
 const load = file => import(pathToFileURL(resolve(upstream, file)).href);
 const { KEYBOARD_LAYOUT } = await load('keyboard-layout.js');
 const { PATTERNS } = await load('effects.js');
@@ -14,7 +14,7 @@ const aliases = new Map([
   [116, 'App'], [117, 'RCtrl'],
 ]);
 const keyNames = KEYBOARD_LAYOUT.map(key => aliases.get(key.index) ?? key.name);
-const localMap = readFileSync(new URL('key-map.h', import.meta.url), 'utf8');
+const localMap = readFileSync(new URL('../shared/key-map.h', import.meta.url), 'utf8');
 const localKeys = Array.from(localMap.matchAll(/^\{("(?:\\.|[^"\\])*"), \d+\}/gm),
                             match => JSON.parse(match[1]));
 assert.deepEqual([...keyNames].sort(), localKeys.sort());
@@ -44,6 +44,6 @@ const presets = patterns.map(({ id, name, fn }) => {
     })),
   };
 });
-writeFileSync(new URL('Resources/Kicktroll-Presets.json', import.meta.url), JSON.stringify(presets) + '\n');
-copyFileSync(resolve(upstream, 'LICENSE'), new URL('Resources/Kicktroll-LICENSE.txt', import.meta.url));
+writeFileSync(new URL('../shared/resources/Kicktroll-Presets.json', import.meta.url), JSON.stringify(presets) + '\n');
+copyFileSync(resolve(upstream, 'LICENSE'), new URL('../shared/resources/Kicktroll-LICENSE.txt', import.meta.url));
 console.log(`Imported ${presets.length} Kicktroll presets with ${keyNames.length} keys each.`);
