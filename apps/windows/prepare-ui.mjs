@@ -11,6 +11,8 @@ await mkdir(resolve(directory,'assets'),{recursive:true});
 for(const name of ['Keylume.ico','logo.png','tray.png'])await cp(resolve(directory,'../../branding',name),resolve(directory,'assets',name));
 let html=await readFile(resolve(directory,'ui/index.html'),'utf8');
 html=html.replace('<head>','<head><meta http-equiv="Content-Security-Policy" content="default-src \'self\'; script-src \'self\'; style-src \'self\' \'unsafe-inline\'; img-src \'self\' blob: data:; connect-src \'self\'; font-src \'self\'; object-src \'none\'; base-uri \'none\'; frame-src \'none\'">');
+html=html.replace('Layouts stay in your browser.','Presets stay on this machine.');
+html=html.replace(/<dialog id="help-dialog">[\s\S]*?<\/dialog>/,`<dialog id="help-dialog"><p class="eyebrow">KEYLUME FOR WINDOWS</p><h2>Your offline RGB studio.</h2><p>Connect one Ant Esports MK1300 V2 (36AE:FE12) and close the official keyboard software or other RGB apps. Press Connect keyboard, choose a layout, then Apply. Keylume uses native HID access; no browser permission or hosted account is needed.</p><p>Custom presets stay in this app’s local profile. Export JSON to back them up or import them on another machine. Closing the window keeps Keylume in the system tray. Double-click the tray icon to reopen; choose Quit Keylume to exit.</p><p>Static previews show your layout. Firmware animations run on the keyboard. No electrical power measurement is simulated.</p><button id="close-help" class="primary">Got it</button></dialog>`);
 await writeFile(resolve(directory,'ui/index.html'),html);
 let css=await readFile(resolve(directory,'ui/style.css'),'utf8');
 css=css.replace(/^@import[^;]*;\s*/,'');

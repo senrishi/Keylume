@@ -7,6 +7,7 @@ bundle="$root/dist/Keylume.app"
 macos="$bundle/Contents/MacOS"
 mkdir -p "$macos" "$bundle/Contents/Resources"
 cp shared/resources/Kicktroll-* "$bundle/Contents/Resources/"
+cp shared/presets/RS.json "$bundle/Contents/Resources/"
 cp branding/Keylume.icns "$bundle/Contents/Resources/"
 archs=(${=KEYLUME_ARCHS:-$(uname -m)})
 for arch in $archs; do

@@ -158,6 +158,12 @@ final class EditorState: ObservableObject {
         let defaults = UserDefaults.standard
         if let data = defaults.data(forKey: "presets"),
            let saved = try? JSONDecoder().decode([String: [String: String]].self, from: data) { presets = saved }
+        if presets["RS"] == nil,
+           let url = Bundle.main.url(forResource: "RS", withExtension: "json"),
+           let data = try? Data(contentsOf: url),
+           let rs = try? JSONDecoder().decode([String: String].self, from: data) {
+            presets["RS"] = rs
+        }
         if defaults.object(forKey: "brightness") != nil { brightness = min(max(defaults.double(forKey: "brightness"), 0), 100) }
         if let data = defaults.data(forKey: "lastAppliedLayout"),
            let last = try? JSONDecoder().decode(LightingSnapshot.self, from: data),
@@ -551,6 +557,13 @@ enum Launcher {
                   probeArguments(colors: [:], effect: 6, brightness: 100, speed: 2) == ["effect", "6", "4", "2"],
                   probeArguments(colors: [:], effect: 6, brightness: 0, speed: 2) == ["effect", "0", "0", "2"] else {
                 fputs("Shared editor/menu bar command generation failed.\n", stderr)
+                exit(1)
+            }
+            guard let rsURL = Bundle.main.url(forResource: "RS", withExtension: "json"),
+                  let rsData = try? Data(contentsOf: rsURL),
+                  let rs = try? JSONDecoder().decode([String: String].self, from: rsData),
+                  Set(rs.keys) == Set(editorKeys), rs["Space"] == black else {
+                fputs("Bundled RS monogram is invalid.\n", stderr)
                 exit(1)
             }
             let snapshot = LightingSnapshot(colors: ["Esc": "00D8FF"], effect: -1, speed: 2, name: "Saved layout")
